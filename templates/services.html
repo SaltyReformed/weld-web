@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Services — Ironforge Welding{% endblock %}
+
+{% block content %}
+
+<!-- ===== SERVICES HERO ===== -->
+<section class="page-hero">
+    <h1>What We <span class="text-accent">Do</span></h1>
+    <p class="page-hero-sub">
+        From structural steel to decorative metalwork — here's how Ironforge
+        Welding can help with your next project.
+    </p>
+</section>
+
+<!-- ===== SERVICES GRID ===== -->
+<section class="services-section">
+    <div class="services-grid">
+        {% for service in services %}
+        <div class="service-card" data-service-id="{{ service.id }}">
+            <div class="service-icon">{{ service.icon }}</div>
+            <h3 class="service-title">{{ service.title }}</h3>
+            <p class="service-short">{{ service.short_description }}</p>
+            <div class="service-detail" id="detail-{{ service.id }}">
+                <p>{{ service.long_description }}</p>
+            </div>
+            <button
+                class="service-toggle"
+                aria-expanded="false"
+                aria-controls="detail-{{ service.id }}"
+            >
+                Learn More
+            </button>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner">
+    <h2>Have a project in mind?</h2>
+    <p>Get a free, no-obligation quote today.</p>
+    <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Request a Quote</a>
+</section>
+
+{% endblock %}

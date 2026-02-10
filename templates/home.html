@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Ironforge Welding — Professional Welding Services{% endblock %}
+
+{% block content %}
+
+<!-- ===== HERO SECTION ===== -->
+<section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+        <p class="hero-tagline">Professional Welding &amp; Fabrication</p>
+        <h1 class="hero-headline">Metal Work Done <span class="text-accent">Right.</span></h1>
+        <p class="hero-sub">
+            Over 15 years of hands-on experience in MIG, TIG, stick welding, and
+            custom fabrication. From farm equipment to fine railings — one call gets it done.
+        </p>
+        <div class="hero-actions">
+            <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Request a Quote</a>
+            <a href="{{ url_for('services.services') }}" class="btn btn-outline">View Services</a>
+        </div>
+    </div>
+</section>
+
+<!-- ===== QUICK HIGHLIGHTS ===== -->
+<section class="highlights">
+    <div class="highlights-grid">
+        <div class="highlight-card">
+            <span class="highlight-icon">🏗️</span>
+            <h3>15+ Years Experience</h3>
+            <p>Trusted craftsmanship backed by over a decade and a half in the trade.</p>
+        </div>
+        <div class="highlight-card">
+            <span class="highlight-icon">🚛</span>
+            <h3>Mobile Service</h3>
+            <p>Fully equipped rig — we come to your site within a 50-mile radius.</p>
+        </div>
+        <div class="highlight-card">
+            <span class="highlight-icon">🤝</span>
+            <h3>Free Estimates</h3>
+            <p>No hidden fees. Get a straightforward quote before any work begins.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== ABOUT SNAPSHOT ===== -->
+<section class="about-snapshot">
+    <div class="about-container">
+        <div class="about-text">
+            <h2>One Man. <span class="text-accent">One Mission.</span></h2>
+            <p>
+                Ironforge Welding is a one-man shop built on the belief that quality
+                work speaks for itself. Every joint is laid with precision, every
+                project treated like it's going on my own property.
+            </p>
+            <p>
+                Whether you need a quick repair or a ground-up fabrication, you'll
+                work directly with me from start to finish — no runaround, no
+                middlemen.
+            </p>
+            <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Let's Talk</a>
+        </div>
+        <div class="about-image-placeholder">
+            <!-- Placeholder for an actual photo of the welder / shop -->
+            <div class="placeholder-box">
+                <span>Photo Placeholder</span>
+                <p>Shop or action shot goes here</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

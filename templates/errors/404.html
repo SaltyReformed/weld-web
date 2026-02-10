@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Page Not Found — Ironforge Welding{% endblock %}
+
+{% block content %}
+<section class="error-page">
+    <h1>404</h1>
+    <p class="error-message">Looks like this page doesn't exist — maybe the weld broke.</p>
+    <a href="{{ url_for('home.index') }}" class="btn btn-primary">Back to Home</a>
+</section>
+{% endblock %}
