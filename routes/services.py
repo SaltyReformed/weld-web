@@ -29,7 +29,7 @@ SERVICES = [
             "Fast, clean, and strong."
         ),
         "icon": "🔩",
-        "image": "bright-welder.jpg",
+        "image": "mig-welding.jpg",
     },
     {
         "id": "tig",
@@ -41,7 +41,7 @@ SERVICES = [
             "aluminum, and decorative work."
         ),
         "icon": "⚡",
-        "image": "close-welding.jpg",
+        "image": "tig-welding.jpg",
     },
     {
         "id": "stick",
@@ -53,7 +53,7 @@ SERVICES = [
             "applications where durability matters most."
         ),
         "icon": "🔧",
-        "image": "seated-welder.jpg",
+        "image": "stick-welding.jpg",
     },
     {
         "id": "fabrication",
@@ -77,7 +77,7 @@ SERVICES = [
             "equipment that can't be moved."
         ),
         "icon": "🔥",
-        "image": "dark-welding.jpg",
+        "image": "welding-repair.jpg",
     },
     {
         "id": "mobile",
@@ -89,7 +89,7 @@ SERVICES = [
             "wherever the job is, we'll be there."
         ),
         "icon": "🚛",
-        "image": "close-welding.jpg",
+        "image": "mobile-welding.jpg",
     },
 ]
 
