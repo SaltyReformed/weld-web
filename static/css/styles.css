@@ -9,24 +9,15 @@
    -------------------------------------------------------------------------- */
 :root {
     /* ---- Palette ---- */
-    --color-bg: #0f1114;
-    /* near-black background       */
-    --color-bg-raised: #1a1d23;
-    /* slightly lighter panels      */
-    --color-bg-card: #22262e;
-    /* card / surface background    */
-    --color-border: #2e333c;
-    /* subtle borders               */
-    --color-text: #d4d4d8;
-    /* primary body text            */
-    --color-text-muted: #8b8f99;
-    /* secondary / caption text     */
-    --color-text-heading: #f0f0f2;
-    /* headings                     */
-    --color-accent: #e8860c;
-    /* amber / welding spark        */
-    --color-accent-hover: #f59e0b;
-    /* lighter amber on hover       */
+    --color-bg: #0f1114;                /* near-black background*/
+    --color-bg-raised: #1a1d23;         /* slightly lighter panels*/
+    --color-bg-card: #22262e;           /* card / surface background*/
+    --color-border: #2e333c;            /* subtle borders*/
+    --color-text: #d4d4d8;              /* primary body text*/
+    --color-text-muted: #8b8f99;        /* secondary / caption text*/
+    --color-text-heading: #f0f0f2;      /* headings*/
+    --color-accent: #e8860c;            /* amber / welding spark*/
+    --color-accent-hover: #f59e0b;      /* lighter amber on hover*/
     --color-accent-glow: rgba(232, 134, 12, 0.25);
     --color-success: #22c55e;
     --color-error: #ef4444;
@@ -386,7 +377,7 @@ a:hover {
 
 .hero-sub {
     font-size: 1.15rem;
-    color: var(--color-bg);
+    color: var(--color-text);
     max-width: 560px;
     margin: 0 auto var(--space-lg);
     line-height: 1.75;
@@ -583,6 +574,33 @@ a:hover {
     transform: translateY(-3px);
 }
 
+/* Service card photo — sits at the top of each card above the icon.
+   Negative margin bleeds the image wrapper to the card edges so the
+   photo spans the full card width despite the card padding.           */
+.service-image-wrapper {
+    margin: calc(-1 * var(--space-lg));
+    /* bleed to card edges       */
+    margin-bottom: var(--space-md);
+    /* space before the icon     */
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    overflow: hidden;
+    /* clip image to rounded top */
+}
+
+.service-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    /* crop to fill, no stretch  */
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+/* Subtle zoom on hover — pairs with the existing card lift */
+.service-card:hover .service-image {
+    transform: scale(1.05);
+}
+
 .service-icon {
     font-size: 2rem;
     margin-bottom: var(--space-md);
@@ -769,6 +787,20 @@ a:hover {
 /* ---- Contact Sidebar ---- */
 .contact-info {
     padding: var(--space-lg);
+}
+
+/* Sidebar photo above the contact details */
+.contact-sidebar-image {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin-bottom: var(--space-lg);
+}
+
+.contact-sidebar-image img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
 }
 
 .contact-info h3 {

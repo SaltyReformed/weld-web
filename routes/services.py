@@ -16,6 +16,8 @@ services_bp = Blueprint("services", __name__)
 
 # Placeholder service data for the prototype.
 # In production this could come from a database or CMS.
+# Each service includes an "image" key pointing to a file in static/images/.
+# Replace the placeholder filenames with real photos as they become available.
 SERVICES = [
     {
         "id": "mig",
@@ -27,6 +29,7 @@ SERVICES = [
             "Fast, clean, and strong."
         ),
         "icon": "🔩",
+        "image": "bright-welder.jpg",
     },
     {
         "id": "tig",
@@ -38,6 +41,7 @@ SERVICES = [
             "aluminum, and decorative work."
         ),
         "icon": "⚡",
+        "image": "close-welding.jpg",
     },
     {
         "id": "stick",
@@ -49,6 +53,7 @@ SERVICES = [
             "applications where durability matters most."
         ),
         "icon": "🔧",
+        "image": "seated-welder.jpg",
     },
     {
         "id": "fabrication",
@@ -60,6 +65,7 @@ SERVICES = [
             "to your exact specifications."
         ),
         "icon": "🛠️",
+        "image": "bright-welder.jpg",
     },
     {
         "id": "repair",
@@ -71,6 +77,7 @@ SERVICES = [
             "equipment that can't be moved."
         ),
         "icon": "🔥",
+        "image": "dark-welding.jpg",
     },
     {
         "id": "mobile",
@@ -82,6 +89,7 @@ SERVICES = [
             "wherever the job is, we'll be there."
         ),
         "icon": "🚛",
+        "image": "close-welding.jpg",
     },
 ]
 

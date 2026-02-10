@@ -17,17 +17,20 @@
     <div class="services-grid">
         {% for service in services %}
         <div class="service-card" data-service-id="{{ service.id }}">
+
+            <!-- Service photo — sits at the top of each card -->
+            <div class="service-image-wrapper">
+                <img class="service-image" src="{{ url_for('static', filename='images/' ~ service.image) }}"
+                    alt="{{ service.title }}" loading="lazy">
+            </div>
+
             <div class="service-icon">{{ service.icon }}</div>
             <h3 class="service-title">{{ service.title }}</h3>
             <p class="service-short">{{ service.short_description }}</p>
             <div class="service-detail" id="detail-{{ service.id }}">
                 <p>{{ service.long_description }}</p>
             </div>
-            <button
-                class="service-toggle"
-                aria-expanded="false"
-                aria-controls="detail-{{ service.id }}"
-            >
+            <button class="service-toggle" aria-expanded="false" aria-controls="detail-{{ service.id }}">
                 Learn More
             </button>
         </div>
