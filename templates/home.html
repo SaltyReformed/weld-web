@@ -6,6 +6,12 @@
 <!-- ===== HERO SECTION ===== -->
 <section class="hero">
     <div class="hero-overlay"></div>
+
+    <!-- Background video -->
+    <video class="hero-video" autoplay muted loop playsinline>
+        <source src="{{ url_for('static', filename='videos/welding.mp4') }}" type="video/mp4">
+    </video>
+
     <div class="hero-content">
         <p class="hero-tagline">Professional Welding &amp; Fabrication</p>
         <h1 class="hero-headline">Metal Work Done <span class="text-accent">Right.</span></h1>
@@ -59,12 +65,10 @@
             <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Let's Talk</a>
         </div>
         <div class="about-image-placeholder">
-            <!-- Placeholder for an actual photo of the welder / shop -->
-            <div class="placeholder-box">
-                <span>Photo Placeholder</span>
-                <p>Shop or action shot goes here</p>
-            </div>
+            <img src="{{ url_for('static', filename='images/welder-unsplash.jpg') }}" alt="Welder working in the Ironforge shop"
+                class="about-photo">
         </div>
+    </div>
     </div>
 </section>
 

@@ -218,6 +218,31 @@ function initFormValidation() {
     });
 }
 
+/**
+ * Pause hero background video if the user prefers reduced motion.
+ */
+function initHeroVideo() {
+    var video = qs(".hero-video");
+    if (!video) {
+        return;
+    }
+
+    var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    if (prefersReduced.matches) {
+        video.pause();
+    }
+
+    // Listen for changes (user toggles the OS setting mid-session).
+    prefersReduced.addEventListener("change", function (e) {
+        if (e.matches) {
+            video.pause();
+        } else {
+            video.play();
+        }
+    });
+}
+
 /* ==========================================================================
    Initialise Everything on DOM Ready
    ========================================================================== */
@@ -227,4 +252,5 @@ document.addEventListener("DOMContentLoaded", function () {
     initFlashDismiss();
     initServiceToggles();
     initFormValidation();
+    initHeroVideo();
 });

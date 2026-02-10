@@ -9,29 +9,38 @@
    -------------------------------------------------------------------------- */
 :root {
     /* ---- Palette ---- */
-    --color-bg:            #0f1114;          /* near-black background       */
-    --color-bg-raised:     #1a1d23;          /* slightly lighter panels      */
-    --color-bg-card:       #22262e;          /* card / surface background    */
-    --color-border:        #2e333c;          /* subtle borders               */
-    --color-text:          #d4d4d8;          /* primary body text            */
-    --color-text-muted:    #8b8f99;          /* secondary / caption text     */
-    --color-text-heading:  #f0f0f2;          /* headings                     */
-    --color-accent:        #e8860c;          /* amber / welding spark        */
-    --color-accent-hover:  #f59e0b;          /* lighter amber on hover       */
-    --color-accent-glow:   rgba(232, 134, 12, 0.25);
-    --color-success:       #22c55e;
-    --color-error:         #ef4444;
+    --color-bg: #0f1114;
+    /* near-black background       */
+    --color-bg-raised: #1a1d23;
+    /* slightly lighter panels      */
+    --color-bg-card: #22262e;
+    /* card / surface background    */
+    --color-border: #2e333c;
+    /* subtle borders               */
+    --color-text: #d4d4d8;
+    /* primary body text            */
+    --color-text-muted: #8b8f99;
+    /* secondary / caption text     */
+    --color-text-heading: #f0f0f2;
+    /* headings                     */
+    --color-accent: #e8860c;
+    /* amber / welding spark        */
+    --color-accent-hover: #f59e0b;
+    /* lighter amber on hover       */
+    --color-accent-glow: rgba(232, 134, 12, 0.25);
+    --color-success: #22c55e;
+    --color-error: #ef4444;
 
     /* ---- Typography ---- */
     --font-heading: "Barlow Condensed", "Arial Narrow", sans-serif;
-    --font-body:    "Work Sans", "Segoe UI", sans-serif;
+    --font-body: "Work Sans", "Segoe UI", sans-serif;
 
     /* ---- Spacing ---- */
-    --space-xs:  0.25rem;
-    --space-sm:  0.5rem;
-    --space-md:  1rem;
-    --space-lg:  2rem;
-    --space-xl:  4rem;
+    --space-xs: 0.25rem;
+    --space-sm: 0.5rem;
+    --space-md: 1rem;
+    --space-lg: 2rem;
+    --space-xl: 4rem;
     --space-2xl: 6rem;
 
     /* ---- Misc ---- */
@@ -301,8 +310,15 @@ a:hover {
 }
 
 @keyframes flash-slide-in {
-    from { opacity: 0; transform: translateY(-8px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -320,13 +336,11 @@ a:hover {
 
     /* Diagonal industrial texture via gradient */
     background:
-        repeating-linear-gradient(
-            -45deg,
+        repeating-linear-gradient(-45deg,
             transparent,
             transparent 40px,
             rgba(255, 255, 255, 0.015) 40px,
-            rgba(255, 255, 255, 0.015) 41px
-        ),
+            rgba(255, 255, 255, 0.015) 41px),
         linear-gradient(165deg, #1a1d23 0%, #0f1114 50%, #181510 100%);
 }
 
@@ -334,17 +348,18 @@ a:hover {
     position: absolute;
     inset: 0;
     /* Radial glow simulating sparks / forge light */
-    background: radial-gradient(
-        ellipse at 50% 80%,
-        rgba(232, 134, 12, 0.08) 0%,
-        transparent 60%
-    );
+    background: radial-gradient(ellipse at 50% 80%,
+            rgba(232, 134, 12, 0.08) 0%,
+            transparent 60%);
     pointer-events: none;
+    z-index: 1;
+    background: rgba(15, 17, 20, 0.55);
+    /* dark tint over the video */
 }
 
 .hero-content {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     max-width: 720px;
     animation: hero-fade-in 0.8s ease-out;
 }
@@ -371,7 +386,7 @@ a:hover {
 
 .hero-sub {
     font-size: 1.15rem;
-    color: var(--color-text-muted);
+    color: var(--color-bg);
     max-width: 560px;
     margin: 0 auto var(--space-lg);
     line-height: 1.75;
@@ -384,9 +399,27 @@ a:hover {
     flex-wrap: wrap;
 }
 
+/* Background video — fills the hero, cropped to cover */
+.hero-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    /* crop to fill, like background-size: cover */
+    z-index: 0;
+}
+
 @keyframes hero-fade-in {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* --------------------------------------------------------------------------
@@ -860,6 +893,7 @@ a:hover {
    Responsive — Tablet & Mobile
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
+
     /* Show the hamburger toggle */
     .nav-toggle {
         display: flex;
