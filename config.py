@@ -17,6 +17,8 @@ class Config:
         SECRET_KEY: Flask secret key for session management and CSRF protection.
         DEBUG: Flag to enable/disable debug mode.
         TESTING: Flag to enable/disable testing mode.
+        WTF_CSRF_ENABLED: Enable CSRF protection via Flask-WTF.
+        RATELIMIT_STORAGE_URI: Backend for Flask-Limiter counters.
     """
 
     # Pull secret key from environment variable, fall back to dev default.
@@ -24,6 +26,15 @@ class Config:
 
     DEBUG = False
     TESTING = False
+
+    # CSRF protection — enabled by default for all environments.
+    WTF_CSRF_ENABLED = True
+
+    # Flask-Limiter: in-memory storage is fine for a single-process deploy.
+    # Switch to "redis://..." for multi-worker production setups.
+    RATELIMIT_STORAGE_URI = os.environ.get(
+        "RATELIMIT_STORAGE_URI", "memory://"
+    )
 
 
 class DevelopmentConfig(Config):
@@ -44,9 +55,10 @@ class ProductionConfig(Config):
 
 
 class TestingConfig(Config):
-    """Testing configuration with testing mode enabled."""
+    """Testing configuration with testing and CSRF disabled for test runners."""
 
     TESTING = True
+    WTF_CSRF_ENABLED = False  # Disable CSRF during automated tests.
 
 
 # Map environment names to configuration classes for easy lookup.

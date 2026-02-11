@@ -2,7 +2,9 @@
 Main Flask application for the Ironforge Welding website.
 
 This module initializes the Flask app, registers blueprints for each
-page route, configures logging, and defines custom error handlers.
+page route, configures logging, sets up CSRF protection and rate
+limiting, adds security headers, and defines custom error handlers.
+
 Run this file directly to start the development server.
 
 Usage:
@@ -16,6 +18,7 @@ from datetime import datetime
 from flask import Flask, render_template
 
 from config import CONFIG_MAP
+from extensions import csrf, limiter
 
 
 # ---------------------------------------------------------------------------
@@ -36,7 +39,9 @@ def configure_logging(app):
     log_level = logging.DEBUG if app.debug else logging.INFO
 
     # Create a formatter that includes timestamp, level, and message.
-    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
+    )
 
     # Stream handler for console output.
     stream_handler = logging.StreamHandler()
@@ -47,7 +52,68 @@ def configure_logging(app):
     app.logger.setLevel(log_level)
     app.logger.addHandler(stream_handler)
 
-    app.logger.info("Logging configured at %s level.", logging.getLevelName(log_level))
+    app.logger.info(
+        "Logging configured at %s level.", logging.getLevelName(log_level)
+    )
+
+
+# ---------------------------------------------------------------------------
+# Security headers
+# ---------------------------------------------------------------------------
+
+
+def register_security_headers(app):
+    """
+    Add standard security headers to every HTTP response.
+
+    These headers mitigate common web vulnerabilities such as
+    clickjacking, MIME-type sniffing, and cross-site scripting.
+
+    Args:
+        app: The Flask application instance.
+    """
+
+    @app.after_request
+    def set_security_headers(response):
+        """Inject security headers into every response."""
+        # Prevent the browser from MIME-sniffing the content type.
+        response.headers["X-Content-Type-Options"] = "nosniff"
+
+        # Block the page from being rendered inside an iframe (clickjacking).
+        response.headers["X-Frame-Options"] = "SAMEORIGIN"
+
+        # Limit referrer information sent with outbound requests.
+        response.headers["Referrer-Policy"] = (
+            "strict-origin-when-cross-origin"
+        )
+
+        # Instruct browsers to only connect via HTTPS in the future.
+        # max-age is one year (31 536 000 seconds).
+        response.headers["Strict-Transport-Security"] = (
+            "max-age=31536000; includeSubDomains"
+        )
+
+        # Basic Content-Security-Policy — adjust as real assets are added.
+        # Allows self-hosted resources, Google Fonts, and inline styles
+        # needed by Flask/Jinja (flash messages, etc.).
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self'; "
+            "style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; "
+            "font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data:; "
+            "media-src 'self'; "
+            "frame-ancestors 'self';"
+        )
+
+        # Prevent browsers from caching sensitive pages.
+        response.headers["Cache-Control"] = (
+            "no-store, no-cache, must-revalidate, max-age=0"
+        )
+
+        return response
+
+    app.logger.info("Security headers registered.")
 
 
 # ---------------------------------------------------------------------------
@@ -80,7 +146,8 @@ def create_app(config_name=None):
     if config_class is None:
         # Fall back to development if an unknown config name is provided.
         logging.warning(
-            "Unknown config name '%s'. Falling back to development.", config_name
+            "Unknown config name '%s'. Falling back to development.",
+            config_name,
         )
         config_class = CONFIG_MAP["development"]
 
@@ -90,11 +157,19 @@ def create_app(config_name=None):
     configure_logging(app)
     app.logger.info("App created with '%s' configuration.", config_name)
 
+    # Initialise extensions.
+    csrf.init_app(app)
+    limiter.init_app(app)
+    app.logger.info("CSRF protection and rate limiter initialised.")
+
     # Register blueprints (route modules).
     register_blueprints(app)
 
     # Register error handlers.
     register_error_handlers(app)
+
+    # Add security headers to every response.
+    register_security_headers(app)
 
     # Inject the current year into all templates for the footer copyright.
     @app.context_processor
@@ -122,8 +197,12 @@ def register_blueprints(app):
     """
     # Local imports to avoid circular dependency issues.
     from routes.home import home_bp  # pylint: disable=import-outside-toplevel
-    from routes.services import services_bp  # pylint: disable=import-outside-toplevel
-    from routes.contact import contact_bp  # pylint: disable=import-outside-toplevel
+    from routes.services import (  # pylint: disable=import-outside-toplevel
+        services_bp,
+    )
+    from routes.contact import (  # pylint: disable=import-outside-toplevel
+        contact_bp,
+    )
 
     app.register_blueprint(home_bp)
     app.register_blueprint(services_bp)
@@ -151,6 +230,12 @@ def register_error_handlers(app):
         app.logger.warning("404 Not Found: %s", error)
         return render_template("errors/404.html"), 404
 
+    @app.errorhandler(429)
+    def rate_limit_exceeded(error):
+        """Handle rate-limit (429 Too Many Requests) responses."""
+        app.logger.warning("429 Rate limit hit: %s", error)
+        return render_template("errors/429.html"), 429
+
     @app.errorhandler(500)
     def internal_server_error(error):
         """Render a custom 500 page."""
@@ -165,5 +250,7 @@ def register_error_handlers(app):
 if __name__ == "__main__":
     # Create the app with the environment-appropriate config.
     application = create_app()
-    application.logger.info("Starting development server on http://127.0.0.1:5000")
+    application.logger.info(
+        "Starting development server on http://127.0.0.1:5000"
+    )
     application.run(host="127.0.0.1", port=5000)

@@ -9,15 +9,15 @@
    -------------------------------------------------------------------------- */
 :root {
     /* ---- Palette ---- */
-    --color-bg: #0f1114;                /* near-black background*/
-    --color-bg-raised: #1a1d23;         /* slightly lighter panels*/
-    --color-bg-card: #22262e;           /* card / surface background*/
-    --color-border: #2e333c;            /* subtle borders*/
-    --color-text: #d4d4d8;              /* primary body text*/
-    --color-text-muted: #8b8f99;        /* secondary / caption text*/
-    --color-text-heading: #f0f0f2;      /* headings*/
-    --color-accent: #e8860c;            /* amber / welding spark*/
-    --color-accent-hover: #f59e0b;      /* lighter amber on hover*/
+    --color-bg: #0f1114;
+    --color-bg-raised: #1a1d23;
+    --color-bg-card: #22262e;
+    --color-border: #2e333c;
+    --color-text: #d4d4d8;
+    --color-text-muted: #8b8f99;
+    --color-text-heading: #f0f0f2;
+    --color-accent: #e8860c;
+    --color-accent-hover: #f59e0b;
     --color-accent-glow: rgba(232, 134, 12, 0.25);
     --color-success: #22c55e;
     --color-error: #ef4444;
@@ -97,6 +97,21 @@ a:hover {
     color: var(--color-text-muted);
     font-size: 0.85rem;
     font-weight: 300;
+}
+
+/* Screen-reader-only text — visually hidden but announced by assistive
+   technology. Used alongside visual indicators (e.g. the red asterisk)
+   to convey "required" status to non-sighted users.                    */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -239,7 +254,6 @@ a:hover {
     transition: all var(--transition);
 }
 
-/* When menu is open, morph bars into an X */
 .nav-toggle.open .nav-toggle-bar:nth-child(1) {
     transform: translateY(7px) rotate(45deg);
 }
@@ -324,8 +338,6 @@ a:hover {
     text-align: center;
     padding: var(--space-2xl) var(--space-lg);
     overflow: hidden;
-
-    /* Diagonal industrial texture via gradient */
     background:
         repeating-linear-gradient(-45deg,
             transparent,
@@ -338,14 +350,12 @@ a:hover {
 .hero-overlay {
     position: absolute;
     inset: 0;
-    /* Radial glow simulating sparks / forge light */
     background: radial-gradient(ellipse at 50% 80%,
             rgba(232, 134, 12, 0.08) 0%,
             transparent 60%);
     pointer-events: none;
     z-index: 1;
     background: rgba(15, 17, 20, 0.55);
-    /* dark tint over the video */
 }
 
 .hero-content {
@@ -390,14 +400,12 @@ a:hover {
     flex-wrap: wrap;
 }
 
-/* Background video — fills the hero, cropped to cover */
 .hero-video {
     position: absolute;
     inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* crop to fill, like background-size: cover */
     z-index: 0;
 }
 
@@ -574,29 +582,21 @@ a:hover {
     transform: translateY(-3px);
 }
 
-/* Service card photo — sits at the top of each card above the icon.
-   Negative margin bleeds the image wrapper to the card edges so the
-   photo spans the full card width despite the card padding.           */
 .service-image-wrapper {
     margin: calc(-1 * var(--space-lg));
-    /* bleed to card edges       */
     margin-bottom: var(--space-md);
-    /* space before the icon     */
     border-radius: var(--radius-md) var(--radius-md) 0 0;
     overflow: hidden;
-    /* clip image to rounded top */
 }
 
 .service-image {
     width: 100%;
     height: 200px;
     object-fit: cover;
-    /* crop to fill, no stretch  */
     display: block;
     transition: transform 0.4s ease;
 }
 
-/* Subtle zoom on hover — pairs with the existing card lift */
 .service-card:hover .service-image {
     transform: scale(1.05);
 }
@@ -700,7 +700,6 @@ a:hover {
     align-items: start;
 }
 
-/* ---- Form Styles ---- */
 .contact-form-wrapper {
     background-color: var(--color-bg-card);
     border: 1px solid var(--color-border);
@@ -750,7 +749,6 @@ a:hover {
     box-shadow: 0 0 0 3px var(--color-accent-glow);
 }
 
-/* Validation error state */
 .form-group input.invalid,
 .form-group textarea.invalid {
     border-color: var(--color-error);
@@ -784,12 +782,10 @@ a:hover {
     padding: 1rem;
 }
 
-/* ---- Contact Sidebar ---- */
 .contact-info {
     padding: var(--space-lg);
 }
 
-/* Sidebar photo above the contact details */
 .contact-sidebar-image {
     border-radius: var(--radius-md);
     overflow: hidden;
@@ -925,13 +921,10 @@ a:hover {
    Responsive — Tablet & Mobile
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
-
-    /* Show the hamburger toggle */
     .nav-toggle {
         display: flex;
     }
 
-    /* Hide links by default on mobile */
     .nav-links {
         display: none;
         flex-direction: column;
@@ -959,13 +952,11 @@ a:hover {
         text-align: center;
     }
 
-    /* Stack the about section vertically */
     .about-container {
         grid-template-columns: 1fr;
         gap: var(--space-lg);
     }
 
-    /* Stack contact form and sidebar vertically */
     .contact-container {
         grid-template-columns: 1fr;
     }

@@ -4,11 +4,12 @@
 {% block content %}
 
 <!-- ===== HERO SECTION ===== -->
-<section class="hero">
+<section class="hero" aria-label="Welcome to Ironforge Welding">
     <div class="hero-overlay"></div>
 
-    <!-- Background video -->
-    <video class="hero-video" autoplay muted loop playsinline>
+    <!-- Background video with poster fallback for slow connections -->
+    <video class="hero-video" autoplay muted loop playsinline
+           poster="{{ url_for('static', filename='images/hero-poster.jpg') }}">
         <source src="{{ url_for('static', filename='videos/welding.mp4') }}" type="video/mp4">
     </video>
 
@@ -27,20 +28,20 @@
 </section>
 
 <!-- ===== QUICK HIGHLIGHTS ===== -->
-<section class="highlights">
+<section class="highlights" aria-label="Business highlights">
     <div class="highlights-grid">
         <div class="highlight-card">
-            <span class="highlight-icon">🏗️</span>
+            <span class="highlight-icon" aria-hidden="true">🏗️</span>
             <h3>15+ Years Experience</h3>
             <p>Trusted craftsmanship backed by over a decade and a half in the trade.</p>
         </div>
         <div class="highlight-card">
-            <span class="highlight-icon">🚛</span>
+            <span class="highlight-icon" aria-hidden="true">🚛</span>
             <h3>Mobile Service</h3>
             <p>Fully equipped rig — we come to your site within a 50-mile radius.</p>
         </div>
         <div class="highlight-card">
-            <span class="highlight-icon">🤝</span>
+            <span class="highlight-icon" aria-hidden="true">🤝</span>
             <h3>Free Estimates</h3>
             <p>No hidden fees. Get a straightforward quote before any work begins.</p>
         </div>
@@ -48,7 +49,7 @@
 </section>
 
 <!-- ===== ABOUT SNAPSHOT ===== -->
-<section class="about-snapshot">
+<section class="about-snapshot" aria-label="About Ironforge Welding">
     <div class="about-container">
         <div class="about-text">
             <h2>One Man. <span class="text-accent">One Mission.</span></h2>
@@ -65,10 +66,10 @@
             <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Let's Talk</a>
         </div>
         <div class="about-image-placeholder">
-            <img src="{{ url_for('static', filename='images/welder-unsplash.jpg') }}" alt="Welder working in the Ironforge shop"
-                class="about-photo">
+            <img src="{{ url_for('static', filename='images/welder-unsplash.jpg') }}"
+                 alt="Welder at work in the Ironforge shop, sparks flying as he grinds a steel joint"
+                 class="about-photo">
         </div>
-    </div>
     </div>
 </section>
 

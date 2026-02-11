@@ -4,11 +4,17 @@ Contact / Quote Request blueprint for the Ironforge Welding website.
 Handles both GET (render the form) and POST (process the submission)
 requests. In this prototype, form submissions are logged and a flash
 message is displayed — no emails are actually sent.
+
+Rate limiting is applied to the POST endpoint to prevent abuse.
 """
 
 import logging
 
 from flask import Blueprint, flash, redirect, render_template, request, url_for
+
+# Import the shared limiter instance so the decorator can apply
+# per-route limits on the form submission endpoint.
+from extensions import limiter
 
 # Module-level logger for this blueprint.
 logger = logging.getLogger(__name__)
@@ -74,17 +80,21 @@ def contact():
         Rendered HTML for the contact page.
     """
     logger.info("Contact page requested (GET).")
-    return render_template("contact.html")
+    # Pass an empty dict so templates can always call form_data.get()
+    # without guarding against None.
+    return render_template("contact.html", form_data={})
 
 
 @contact_bp.route("/contact", methods=["POST"])
+@limiter.limit("5 per minute")  # Prevent rapid-fire form spam.
 def contact_submit():
     """
     Process a submitted contact / quote request form.
 
     Validates the form data. On success, logs the submission details
     and redirects with a success flash message. On failure, re-renders
-    the form with error messages.
+    the form with error messages **and the user's original input** so
+    they don't have to retype everything.
 
     Returns:
         A redirect to the contact page (on success) or the re-rendered
@@ -99,17 +109,25 @@ def contact_submit():
         for err in errors:
             logger.warning("Form validation error: %s", err)
             flash(err, "error")
-        # Re-render the form so the user can correct their input.
-        return render_template("contact.html"), 400
+
+        # Re-render the form, passing back the submitted data so the
+        # user's input is preserved in the form fields.
+        return (
+            render_template("contact.html", form_data=request.form),
+            400,
+        )
 
     # Extract sanitized values for logging.
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
-    service_type = request.form.get("service_type", "").strip() or "not specified"
+    service_type = (
+        request.form.get("service_type", "").strip() or "not specified"
+    )
     phone = request.form.get("phone", "").strip() or "not provided"
 
     logger.info(
-        "Quote request received — Name: %s | Email: %s | Service: %s | Phone: %s",
+        "Quote request received — Name: %s | Email: %s | Service: %s "
+        "| Phone: %s",
         name,
         email,
         service_type,

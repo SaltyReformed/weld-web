@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Get a Quote — Ironforge Welding{% endblock %}
+{% block meta_description %}Request a free welding quote from Ironforge Welding. Fill out the form and get a response within 24 hours.{% endblock %}
 
 {% block content %}
 
@@ -13,55 +14,89 @@
 </section>
 
 <!-- ===== CONTACT FORM ===== -->
-<section class="contact-section">
+<section class="contact-section" aria-label="Quote request form">
     <div class="contact-container">
 
         <div class="contact-form-wrapper">
-            <form method="POST" action="{{ url_for('contact.contact_submit') }}" class="quote-form" id="quote-form"
-                novalidate>
+            <form method="POST"
+                  action="{{ url_for('contact.contact_submit') }}"
+                  class="quote-form"
+                  id="quote-form"
+                  novalidate>
+
+                <!-- CSRF token — required by Flask-WTF to protect against
+                     cross-site request forgery attacks. -->
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
                 <!-- Name -->
                 <div class="form-group">
-                    <label for="name">Name <span class="required">*</span></label>
-                    <input type="text" id="name" name="name" placeholder="Your full name" required autocomplete="name">
-                    <span class="field-error" id="name-error"></span>
+                    <label for="name">Name <span class="required" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                    <input type="text"
+                           id="name"
+                           name="name"
+                           placeholder="Your full name"
+                           required
+                           autocomplete="name"
+                           aria-required="true"
+                           aria-describedby="name-error"
+                           value="{{ form_data.get('name', '') }}">
+                    <span class="field-error" id="name-error" role="alert"></span>
                 </div>
 
                 <!-- Email -->
                 <div class="form-group">
-                    <label for="email">Email <span class="required">*</span></label>
-                    <input type="email" id="email" name="email" placeholder="you@example.com" required
-                        autocomplete="email">
-                    <span class="field-error" id="email-error"></span>
+                    <label for="email">Email <span class="required" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           placeholder="you@example.com"
+                           required
+                           autocomplete="email"
+                           aria-required="true"
+                           aria-describedby="email-error"
+                           value="{{ form_data.get('email', '') }}">
+                    <span class="field-error" id="email-error" role="alert"></span>
                 </div>
 
                 <!-- Phone (optional) -->
                 <div class="form-group">
                     <label for="phone">Phone <span class="optional">(optional)</span></label>
-                    <input type="tel" id="phone" name="phone" placeholder="(555) 123-4567" autocomplete="tel">
+                    <input type="tel"
+                           id="phone"
+                           name="phone"
+                           placeholder="(555) 123-4567"
+                           autocomplete="tel"
+                           value="{{ form_data.get('phone', '') }}">
                 </div>
 
                 <!-- Service type -->
                 <div class="form-group">
                     <label for="service_type">Service Needed</label>
-                    <select id="service_type" name="service_type">
-                        <option value="">— Select a service —</option>
-                        <option value="mig">MIG Welding</option>
-                        <option value="tig">TIG Welding</option>
-                        <option value="stick">Stick Welding</option>
-                        <option value="fabrication">Custom Fabrication</option>
-                        <option value="repair">Welding Repair</option>
-                        <option value="mobile">Mobile Welding</option>
-                        <option value="other">Other / Not Sure</option>
+                    <select id="service_type"
+                            name="service_type"
+                            aria-label="Select the type of welding service you need">
+                        <option value="" {% if not form_data.get('service_type') %}selected{% endif %}>— Select a service —</option>
+                        <option value="mig"         {% if form_data.get('service_type') == 'mig' %}selected{% endif %}>MIG Welding</option>
+                        <option value="tig"         {% if form_data.get('service_type') == 'tig' %}selected{% endif %}>TIG Welding</option>
+                        <option value="stick"       {% if form_data.get('service_type') == 'stick' %}selected{% endif %}>Stick Welding</option>
+                        <option value="fabrication"  {% if form_data.get('service_type') == 'fabrication' %}selected{% endif %}>Custom Fabrication</option>
+                        <option value="repair"      {% if form_data.get('service_type') == 'repair' %}selected{% endif %}>Welding Repair</option>
+                        <option value="mobile"      {% if form_data.get('service_type') == 'mobile' %}selected{% endif %}>Mobile Welding</option>
+                        <option value="other"       {% if form_data.get('service_type') == 'other' %}selected{% endif %}>Other / Not Sure</option>
                     </select>
                 </div>
 
                 <!-- Message -->
                 <div class="form-group">
-                    <label for="message">Project Description <span class="required">*</span></label>
-                    <textarea id="message" name="message" rows="5"
-                        placeholder="Tell me about your project — what needs to be welded, repaired, or built?"
-                        required></textarea>
-                    <span class="field-error" id="message-error"></span>
+                    <label for="message">Project Description <span class="required" aria-hidden="true">*</span><span class="sr-only">(required)</span></label>
+                    <textarea id="message"
+                              name="message"
+                              rows="5"
+                              placeholder="Tell me about your project — what needs to be welded, repaired, or built?"
+                              required
+                              aria-required="true"
+                              aria-describedby="message-error">{{ form_data.get('message', '') }}</textarea>
+                    <span class="field-error" id="message-error" role="alert"></span>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-submit">Send Quote Request</button>
@@ -69,38 +104,41 @@
         </div>
 
         <!-- Contact sidebar info -->
-        <aside class="contact-info">
+        <aside class="contact-info" aria-label="Alternative contact methods">
 
             <!-- Sidebar photo — shop or mobile rig -->
             <div class="contact-sidebar-image">
-                <img src="{{ url_for('static', filename='images/seated-welder.jpg') }}" alt="Ironforge Welding shop"
-                    loading="lazy">
+                <img src="{{ url_for('static', filename='images/seated-welder.jpg') }}"
+                     alt="Ironforge Welding owner seated in the workshop ready to discuss your project"
+                     loading="lazy"
+                     width="400"
+                     height="220">
             </div>
 
             <h3>Other Ways to Reach Me</h3>
             <div class="info-item">
-                <span class="info-icon">📞</span>
+                <span class="info-icon" aria-hidden="true">📞</span>
                 <div>
                     <strong>Phone</strong>
-                    <p>(555) 867-5309</p>
+                    <p><a href="tel:+15558675309" aria-label="Call (555) 867-5309">(555) 867-5309</a></p>
                 </div>
             </div>
             <div class="info-item">
-                <span class="info-icon">📧</span>
+                <span class="info-icon" aria-hidden="true">📧</span>
                 <div>
                     <strong>Email</strong>
-                    <p>info@ironforgewelding.com</p>
+                    <p><a href="mailto:info@ironforgewelding.com" aria-label="Email info@ironforgewelding.com">info@ironforgewelding.com</a></p>
                 </div>
             </div>
             <div class="info-item">
-                <span class="info-icon">📍</span>
+                <span class="info-icon" aria-hidden="true">📍</span>
                 <div>
                     <strong>Shop Location</strong>
                     <p>123 Workshop Lane<br>Anytown, USA</p>
                 </div>
             </div>
             <div class="info-item">
-                <span class="info-icon">🕐</span>
+                <span class="info-icon" aria-hidden="true">🕐</span>
                 <div>
                     <strong>Hours</strong>
                     <p>Mon–Fri: 7 AM – 5 PM<br>Sat: By appointment</p>

@@ -16,8 +16,8 @@ services_bp = Blueprint("services", __name__)
 
 # Placeholder service data for the prototype.
 # In production this could come from a database or CMS.
-# Each service includes an "image" key pointing to a file in static/images/.
-# Replace the placeholder filenames with real photos as they become available.
+# Each service includes an "image" key pointing to a file in static/images/
+# and an "image_alt" key with a descriptive alt-text string for accessibility.
 SERVICES = [
     {
         "id": "mig",
@@ -30,11 +30,17 @@ SERVICES = [
         ),
         "icon": "🔩",
         "image": "mig-welding.jpg",
+        "image_alt": (
+            "Close-up of a MIG welding torch laying a bead on a steel "
+            "joint with bright arc and wire feed visible"
+        ),
     },
     {
         "id": "tig",
         "title": "TIG Welding",
-        "short_description": "Precision welding for critical joints and thin materials.",
+        "short_description": (
+            "Precision welding for critical joints and thin materials."
+        ),
         "long_description": (
             "Tungsten Inert Gas (TIG) welding delivers the highest quality "
             "welds with pinpoint control. Perfect for stainless steel, "
@@ -42,11 +48,17 @@ SERVICES = [
         ),
         "icon": "⚡",
         "image": "tig-welding.jpg",
+        "image_alt": (
+            "Welder using a TIG torch to precision-weld a stainless steel "
+            "pipe with a fine, controlled arc"
+        ),
     },
     {
         "id": "stick",
         "title": "Stick Welding",
-        "short_description": "Rugged, portable welding for heavy structural work.",
+        "short_description": (
+            "Rugged, portable welding for heavy structural work."
+        ),
         "long_description": (
             "Shielded Metal Arc Welding (SMAW) handles the toughest jobs — "
             "thick steel, outdoor conditions, and heavy structural "
@@ -54,11 +66,17 @@ SERVICES = [
         ),
         "icon": "🔧",
         "image": "stick-welding.jpg",
+        "image_alt": (
+            "Stick welding electrode producing bright sparks on a heavy "
+            "steel beam in an outdoor work environment"
+        ),
     },
     {
         "id": "fabrication",
         "title": "Custom Fabrication",
-        "short_description": "From concept to finished piece — built to your specs.",
+        "short_description": (
+            "From concept to finished piece — built to your specs."
+        ),
         "long_description": (
             "Need something custom? From gates and railings to truck "
             "bumpers and equipment mounts, every piece is hand-crafted "
@@ -66,11 +84,17 @@ SERVICES = [
         ),
         "icon": "🛠️",
         "image": "bright-welder.jpg",
+        "image_alt": (
+            "Welder fabricating a custom metal frame in a brightly lit "
+            "workshop with sparks flying from the grinder"
+        ),
     },
     {
         "id": "repair",
         "title": "Welding Repair",
-        "short_description": "Fix broken equipment, trailers, and metal structures.",
+        "short_description": (
+            "Fix broken equipment, trailers, and metal structures."
+        ),
         "long_description": (
             "Cracked frames, broken hinges, snapped brackets — if it's "
             "metal, it can be fixed. On-site repair available for "
@@ -78,11 +102,17 @@ SERVICES = [
         ),
         "icon": "🔥",
         "image": "welding-repair.jpg",
+        "image_alt": (
+            "Technician repairing a cracked steel trailer hitch with a "
+            "welding torch, protective helmet down"
+        ),
     },
     {
         "id": "mobile",
         "title": "Mobile Welding",
-        "short_description": "We come to you — on-site service within 50 miles.",
+        "short_description": (
+            "We come to you — on-site service within 50 miles."
+        ),
         "long_description": (
             "Fully equipped mobile welding rig ready to roll. Farm "
             "equipment, construction sites, residential projects — "
@@ -90,6 +120,10 @@ SERVICES = [
         ),
         "icon": "🚛",
         "image": "mobile-welding.jpg",
+        "image_alt": (
+            "Fully equipped mobile welding truck parked at a rural job "
+            "site with welding equipment visible in the truck bed"
+        ),
     },
 ]
 
@@ -105,5 +139,7 @@ def services():
     Returns:
         Rendered HTML for the services page.
     """
-    logger.info("Services page requested. Rendering %s services.", len(SERVICES))
+    logger.info(
+        "Services page requested. Rendering %s services.", len(SERVICES)
+    )
     return render_template("services.html", services=SERVICES)

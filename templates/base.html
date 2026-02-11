@@ -3,37 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Ironforge Welding — Professional welding services, custom fabrication, and mobile welding.">
+    <meta name="description" content="{% block meta_description %}Ironforge Welding — Professional welding services, custom fabrication, and mobile welding in Anytown, USA.{% endblock %}">
 
     <title>{% block title %}Ironforge Welding{% endblock %}</title>
 
-    <!-- Google Fonts — loaded externally, no inline CSS -->
+    <!-- CSRF token — available to JavaScript for AJAX requests if needed -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- ===== Open Graph Meta Tags ===== -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Ironforge Welding">
+    <meta property="og:title" content="{% block og_title %}Ironforge Welding — Professional Welding Services{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Over 15 years of hands-on welding and fabrication experience. MIG, TIG, stick welding, custom fabrication, and mobile service within 50 miles.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/og-preview.jpg', _external=True) }}{% endblock %}">
+    <meta property="og:url" content="{{ request.url }}">
+
+    <!-- Twitter / X card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Ironforge Welding — Professional Welding Services">
+    <meta name="twitter:description" content="Over 15 years of hands-on welding and fabrication experience.">
+    <meta name="twitter:image" content="{{ url_for('static', filename='images/og-preview.jpg', _external=True) }}">
+
+    <!-- ===== Favicons ===== -->
+    <!-- SVG favicon for modern browsers (scales perfectly at any size) -->
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
+    <!-- PNG fallback for older browsers -->
+    <link rel="icon" href="{{ url_for('static', filename='images/icon-welding-64.png') }}" type="image/png" sizes="64x64">
+    <!-- Apple touch icon for iOS home-screen bookmarks -->
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+
+    <!-- Google Fonts — display=swap already set to avoid FOIT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
     <!-- All styles in a separate CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
-    <link rel="icon" href="{{ url_for('static', filename='images/icon-welding-64.png') }}">
+
+    <!-- ===== JSON-LD Structured Data — LocalBusiness Schema ===== -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Ironforge Welding",
+        "description": "Professional welding services, custom metal fabrication, and mobile welding in Anytown, USA. Over 15 years of experience.",
+        "url": "{{ request.host_url.rstrip('/') }}",
+        "telephone": "+15558675309",
+        "email": "info@ironforgewelding.com",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "123 Workshop Lane",
+            "addressLocality": "Anytown",
+            "addressRegion": "US",
+            "addressCountry": "US"
+        },
+        "openingHoursSpecification": [
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"],
+                "opens": "07:00",
+                "closes": "17:00"
+            },
+            {
+                "@type": "OpeningHoursSpecification",
+                "dayOfWeek": "Saturday",
+                "opens": "08:00",
+                "closes": "12:00"
+            }
+        ],
+        "areaServed": {
+            "@type": "GeoCircle",
+            "geoMidpoint": {
+                "@type": "GeoCoordinates",
+                "latitude": 0,
+                "longitude": 0
+            },
+            "geoRadius": "80467"
+        },
+        "priceRange": "$$",
+        "image": "{{ url_for('static', filename='images/og-preview.jpg', _external=True) }}",
+        "sameAs": []
+    }
+    </script>
 </head>
 <body>
 
     <!-- ===== NAVIGATION ===== -->
-    <nav class="main-nav" id="main-nav">
+    <nav class="main-nav" id="main-nav" aria-label="Main navigation">
         <div class="nav-container">
-            <a href="{{ url_for('home.index') }}" class="nav-logo">
-                <span class="logo-icon">⚒</span>
+            <a href="{{ url_for('home.index') }}" class="nav-logo" aria-label="Ironforge Welding — Home">
+                <span class="logo-icon" aria-hidden="true">⚒</span>
                 <span class="logo-text">Ironforge Welding</span>
             </a>
 
             <!-- Hamburger button for mobile -->
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
             </button>
 
-            <ul class="nav-links" id="nav-links">
+            <ul class="nav-links" id="nav-links" role="list">
                 <li><a href="{{ url_for('home.index') }}">Home</a></li>
                 <li><a href="{{ url_for('services.services') }}">Services</a></li>
                 <li><a href="{{ url_for('contact.contact') }}" class="nav-cta">Get a Quote</a></li>
@@ -44,11 +114,11 @@
     <!-- ===== FLASH MESSAGES ===== -->
     {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-            <div class="flash-container">
+            <div class="flash-container" role="alert" aria-live="polite">
                 {% for category, message in messages %}
                     <div class="flash-message flash-{{ category }}">
                         <span class="flash-text">{{ message }}</span>
-                        <button class="flash-close" aria-label="Dismiss">&times;</button>
+                        <button class="flash-close" aria-label="Dismiss notification">&times;</button>
                     </div>
                 {% endfor %}
             </div>
@@ -64,13 +134,13 @@
     <footer class="site-footer">
         <div class="footer-container">
             <div class="footer-brand">
-                <span class="logo-icon">⚒</span>
+                <span class="logo-icon" aria-hidden="true">⚒</span>
                 <span class="logo-text">Ironforge Welding</span>
             </div>
             <p class="footer-tagline">Built strong. Built to last.</p>
             <div class="footer-contact">
                 <p>123 Workshop Lane, Anytown, USA</p>
-                <p>(555) 867-5309</p>
+                <p><a href="tel:+15558675309" aria-label="Call Ironforge Welding at (555) 867-5309">(555) 867-5309</a></p>
             </div>
             <p class="footer-copy">&copy; {{ current_year }} Ironforge Welding. All rights reserved.</p>
         </div>

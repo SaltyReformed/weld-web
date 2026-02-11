@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% block title %}Services — Ironforge Welding{% endblock %}
+{% block meta_description %}Explore the welding services offered by Ironforge Welding — MIG, TIG, stick welding, custom fabrication, repair, and mobile welding.{% endblock %}
 
 {% block content %}
 
@@ -13,33 +14,40 @@
 </section>
 
 <!-- ===== SERVICES GRID ===== -->
-<section class="services-section">
+<section class="services-section" aria-label="Available welding services">
     <div class="services-grid">
         {% for service in services %}
-        <div class="service-card" data-service-id="{{ service.id }}">
+        <article class="service-card" data-service-id="{{ service.id }}">
 
             <!-- Service photo — sits at the top of each card -->
             <div class="service-image-wrapper">
-                <img class="service-image" src="{{ url_for('static', filename='images/' ~ service.image) }}"
-                    alt="{{ service.title }}" loading="lazy">
+                <img class="service-image"
+                     src="{{ url_for('static', filename='images/' ~ service.image) }}"
+                     alt="{{ service.image_alt }}"
+                     loading="lazy"
+                     width="400"
+                     height="200">
             </div>
 
-            <div class="service-icon">{{ service.icon }}</div>
+            <div class="service-icon" aria-hidden="true">{{ service.icon }}</div>
             <h3 class="service-title">{{ service.title }}</h3>
             <p class="service-short">{{ service.short_description }}</p>
             <div class="service-detail" id="detail-{{ service.id }}">
                 <p>{{ service.long_description }}</p>
             </div>
-            <button class="service-toggle" aria-expanded="false" aria-controls="detail-{{ service.id }}">
+            <button class="service-toggle"
+                    aria-expanded="false"
+                    aria-controls="detail-{{ service.id }}"
+                    aria-label="Toggle details for {{ service.title }}">
                 Learn More
             </button>
-        </div>
+        </article>
         {% endfor %}
     </div>
 </section>
 
 <!-- ===== CTA BANNER ===== -->
-<section class="cta-banner">
+<section class="cta-banner" aria-label="Call to action">
     <h2>Have a project in mind?</h2>
     <p>Get a free, no-obligation quote today.</p>
     <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Request a Quote</a>
