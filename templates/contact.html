@@ -5,13 +5,24 @@
 {% block content %}
 
 <!-- ===== CONTACT HERO ===== -->
-<section class="page-hero">
-    <h1>Get a <span class="text-accent">Quote</span></h1>
-    <p class="page-hero-sub">
-        Fill out the form below and I'll get back to you within 24 hours
-        with a free estimate.
-    </p>
+<section class="hero" aria-label="Ironforge Welding Services">
+    <div class="hero-overlay"></div>
+
+    <!-- Background video with poster fallback for slow connections -->
+    <video class="hero-video" autoplay muted loop playsinline
+        poster="{{ url_for('static', filename='images/hero-fallback-home.jpg') }}">
+        <source src="{{ url_for('static', filename='videos/metal-welding-sparks.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+        <h1 class="hero-headline">Get a <span class="text-accent">Quote</span></h1>
+        <p class="hero-sub">
+            Fill out the form below and I'll get back to you within 24 hours
+            with a free estimate.
+        </p>
+    </div>
 </section>
+
 
 <!-- ===== CONTACT FORM ===== -->
 <section class="contact-section" aria-label="Quote request form">

@@ -5,13 +5,25 @@
 {% block content %}
 
 <!-- ===== SERVICES HERO ===== -->
-<section class="page-hero">
-    <h1>What We <span class="text-accent">Do</span></h1>
-    <p class="page-hero-sub">
-        From structural steel to decorative metalwork — here's how Ironforge
-        Welding can help with your next project.
-    </p>
+<section class="hero" aria-label="Ironforge Welding Services">
+    <div class="hero-overlay"></div>
+
+    <!-- Background video with poster fallback for slow connections -->
+    <video class="hero-video" autoplay muted loop playsinline
+        poster="{{ url_for('static', filename='images/hero-fallback-home.jpg') }}">
+        <source src="{{ url_for('static', filename='videos/welder-zoom.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+        <h1 class="hero-headline">What We <span class="text-accent">Do</span></h1>
+        <p class="hero-sub">
+            From structural steel to decorative metalwork — here's how Ironforge
+            Welding can help with your next project.
+        </p>
+    </div>
 </section>
+<section class="page-hero">
+
 
 <!-- ===== SERVICES GRID ===== -->
 <section class="services-section" aria-label="Available welding services">

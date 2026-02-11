@@ -2,8 +2,8 @@
 Main Flask application for the Ironforge Welding website.
 
 This module initializes the Flask app, registers blueprints for each
-page route, configures logging, sets up CSRF protection and rate
-limiting, adds security headers, and defines custom error handlers.
+page route, configures logging, sets up CSRF protection, rate limiting,
+and Flask-Mail, adds security headers, and defines custom error handlers.
 
 Run this file directly to start the development server.
 
@@ -18,7 +18,7 @@ from datetime import datetime
 from flask import Flask, render_template
 
 from config import CONFIG_MAP
-from extensions import csrf, limiter
+from extensions import csrf, limiter, mail
 
 
 # ---------------------------------------------------------------------------
@@ -30,7 +30,7 @@ def configure_logging(app):
     """
     Configure application-wide logging.
 
-    Sets up a stream handler with a consistent format. The log level
+    Sets up a stream handler with a consistent format.  The log level
     is DEBUG when the app is in debug mode, otherwise INFO.
 
     Args:
@@ -39,9 +39,7 @@ def configure_logging(app):
     log_level = logging.DEBUG if app.debug else logging.INFO
 
     # Create a formatter that includes timestamp, level, and message.
-    formatter = logging.Formatter(
-        "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
-    )
+    formatter = logging.Formatter("%(asctime)s [%(levelname)s] %(name)s: %(message)s")
 
     # Stream handler for console output.
     stream_handler = logging.StreamHandler()
@@ -52,9 +50,7 @@ def configure_logging(app):
     app.logger.setLevel(log_level)
     app.logger.addHandler(stream_handler)
 
-    app.logger.info(
-        "Logging configured at %s level.", logging.getLevelName(log_level)
-    )
+    app.logger.info("Logging configured at %s level.", logging.getLevelName(log_level))
 
 
 # ---------------------------------------------------------------------------
@@ -83,9 +79,7 @@ def register_security_headers(app):
         response.headers["X-Frame-Options"] = "SAMEORIGIN"
 
         # Limit referrer information sent with outbound requests.
-        response.headers["Referrer-Policy"] = (
-            "strict-origin-when-cross-origin"
-        )
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
 
         # Instruct browsers to only connect via HTTPS in the future.
         # max-age is one year (31 536 000 seconds).
@@ -160,7 +154,22 @@ def create_app(config_name=None):
     # Initialise extensions.
     csrf.init_app(app)
     limiter.init_app(app)
-    app.logger.info("CSRF protection and rate limiter initialised.")
+    mail.init_app(app)
+    app.logger.info("CSRF protection, rate limiter, and Flask-Mail initialised.")
+
+    # Log mail status so it's obvious in the console whether email
+    # sending is active or suppressed.
+    if app.config.get("MAIL_ENABLED"):
+        app.logger.info(
+            "Email sending ENABLED — outbound via %s:%s.",
+            app.config.get("MAIL_SERVER"),
+            app.config.get("MAIL_PORT"),
+        )
+    else:
+        app.logger.info(
+            "Email sending DISABLED — submissions will be logged only. "
+            "Set MAIL_ENABLED=true to activate."
+        )
 
     # Register blueprints (route modules).
     register_blueprints(app)
@@ -197,16 +206,14 @@ def register_blueprints(app):
     """
     # Local imports to avoid circular dependency issues.
     from routes.home import home_bp  # pylint: disable=import-outside-toplevel
-    from routes.services import (  # pylint: disable=import-outside-toplevel
-        services_bp,
-    )
-    from routes.contact import (  # pylint: disable=import-outside-toplevel
-        contact_bp,
-    )
+    from routes.services import services_bp  # pylint: disable=import-outside-toplevel
+    from routes.contact import contact_bp  # pylint: disable=import-outside-toplevel
+    from routes.gallery import gallery_bp  # pylint: disable=import-outside-toplevel
 
     app.register_blueprint(home_bp)
     app.register_blueprint(services_bp)
     app.register_blueprint(contact_bp)
+    app.register_blueprint(gallery_bp)
 
     app.logger.info("All blueprints registered successfully.")
 
@@ -250,7 +257,5 @@ def register_error_handlers(app):
 if __name__ == "__main__":
     # Create the app with the environment-appropriate config.
     application = create_app()
-    application.logger.info(
-        "Starting development server on http://127.0.0.1:5000"
-    )
+    application.logger.info("Starting development server on http://127.0.0.1:5000")
     application.run(host="127.0.0.1", port=5000)

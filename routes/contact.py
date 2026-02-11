@@ -2,19 +2,29 @@
 Contact / Quote Request blueprint for the Ironforge Welding website.
 
 Handles both GET (render the form) and POST (process the submission)
-requests. In this prototype, form submissions are logged and a flash
-message is displayed — no emails are actually sent.
+requests.  When MAIL_ENABLED is true in the app config, form
+submissions are emailed to the business owner via Flask-Mail.
+Otherwise they are logged to the console (useful during development).
 
 Rate limiting is applied to the POST endpoint to prevent abuse.
 """
 
 import logging
 
-from flask import Blueprint, flash, redirect, render_template, request, url_for
+from flask import (
+    Blueprint,
+    current_app,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
+from flask_mail import Message
 
-# Import the shared limiter instance so the decorator can apply
-# per-route limits on the form submission endpoint.
-from extensions import limiter
+# Import the shared limiter and mail instances so the decorator and
+# the send function can be used from this module.
+from extensions import limiter, mail
 
 # Module-level logger for this blueprint.
 logger = logging.getLogger(__name__)
@@ -30,6 +40,17 @@ VALID_SERVICE_TYPES = {
     "repair",
     "mobile",
     "other",
+}
+
+# Human-readable labels for the notification email.
+SERVICE_LABELS = {
+    "mig": "MIG Welding",
+    "tig": "TIG Welding",
+    "stick": "Stick Welding",
+    "fabrication": "Custom Fabrication",
+    "repair": "Welding Repair",
+    "mobile": "Mobile Welding",
+    "other": "Other / Not Sure",
 }
 
 
@@ -71,6 +92,77 @@ def validate_contact_form(form_data):
     return (len(errors) == 0, errors)
 
 
+def send_quote_email(name, email, phone, service_type, message_body):
+    """
+    Send a quote-request notification email to the business owner.
+
+    If MAIL_ENABLED is false the email content is logged instead.
+    Any SMTP errors are caught and logged so the user still sees a
+    success message (the submission is not lost — it's in the logs).
+
+    Args:
+        name: Customer's full name.
+        email: Customer's email address.
+        phone: Customer's phone number (or "not provided").
+        service_type: The service slug (or "not specified").
+        message_body: Free-text project description.
+    """
+    # Build a readable service label for the email.
+    service_label = SERVICE_LABELS.get(service_type, service_type)
+
+    # Compose the notification email body.
+    body_lines = [
+        "New quote request from the Ironforge Welding website.",
+        "",
+        "--- Customer Details ---",
+        "Name:    %s" % name,
+        "Email:   %s" % email,
+        "Phone:   %s" % phone,
+        "Service: %s" % service_label,
+        "",
+        "--- Project Description ---",
+        message_body,
+        "",
+        "---",
+        "Reply directly to this email to respond to the customer.",
+    ]
+    body_text = "\n".join(body_lines)
+
+    # Check if email sending is enabled.
+    if not current_app.config.get("MAIL_ENABLED"):
+        logger.info(
+            "MAIL_ENABLED is false — email NOT sent.  Contents:\n%s",
+            body_text,
+        )
+        return
+
+    recipient = current_app.config.get("QUOTE_RECIPIENT_EMAIL")
+    subject = "New Quote Request from %s" % name
+
+    msg = Message(
+        subject=subject,
+        recipients=[recipient],
+        body=body_text,
+        reply_to=email,  # Let the owner reply straight to the customer.
+    )
+
+    try:
+        mail.send(msg)
+        logger.info(
+            "Quote notification email sent to %s for customer %s.",
+            recipient,
+            email,
+        )
+    except Exception:  # pylint: disable=broad-except
+        # Log the full traceback so we can diagnose SMTP issues without
+        # crashing the request.  The user still gets a success flash —
+        # the submission is preserved in the application logs.
+        logger.exception(
+            "Failed to send quote notification email for customer %s.",
+            email,
+        )
+
+
 @contact_bp.route("/contact", methods=["GET"])
 def contact():
     """
@@ -91,10 +183,10 @@ def contact_submit():
     """
     Process a submitted contact / quote request form.
 
-    Validates the form data. On success, logs the submission details
-    and redirects with a success flash message. On failure, re-renders
-    the form with error messages **and the user's original input** so
-    they don't have to retype everything.
+    Validates the form data.  On success, sends (or logs) a
+    notification email and redirects with a success flash message.
+    On failure, re-renders the form with error messages **and the
+    user's original input** so they don't have to retype everything.
 
     Returns:
         A redirect to the contact page (on success) or the re-rendered
@@ -117,26 +209,24 @@ def contact_submit():
             400,
         )
 
-    # Extract sanitized values for logging.
+    # Extract sanitised values.
     name = request.form.get("name", "").strip()
     email = request.form.get("email", "").strip()
-    service_type = (
-        request.form.get("service_type", "").strip() or "not specified"
-    )
+    service_type = request.form.get("service_type", "").strip() or "not specified"
     phone = request.form.get("phone", "").strip() or "not provided"
+    message_body = request.form.get("message", "").strip()
 
     logger.info(
-        "Quote request received — Name: %s | Email: %s | Service: %s "
-        "| Phone: %s",
+        "Quote request received — Name: %s | Email: %s | Service: %s " "| Phone: %s",
         name,
         email,
         service_type,
         phone,
     )
 
-    # In a production app this is where you would send an email,
-    # write to a database, or push to a CRM. For the prototype
-    # we just flash a success message.
+    # Attempt to send (or log) the notification email.
+    send_quote_email(name, email, phone, service_type, message_body)
+
     flash(
         "Thanks, " + name + "! Your quote request has been received. "
         "We'll be in touch within 24 hours.",

@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="{% block meta_description %}Ironforge Welding — Professional welding services, custom fabrication, and mobile welding in Anytown, USA.{% endblock %}">
+    <meta name="description"
+        content="{% block meta_description %}Ironforge Welding — Professional welding services, custom fabrication, and mobile welding in Anytown, USA.{% endblock %}">
 
     <title>{% block title %}Ironforge Welding{% endblock %}</title>
 
@@ -13,9 +15,12 @@
     <!-- ===== Open Graph Meta Tags ===== -->
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Ironforge Welding">
-    <meta property="og:title" content="{% block og_title %}Ironforge Welding — Professional Welding Services{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Over 15 years of hands-on welding and fabrication experience. MIG, TIG, stick welding, custom fabrication, and mobile service within 50 miles.{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/og-preview.jpg', _external=True) }}{% endblock %}">
+    <meta property="og:title"
+        content="{% block og_title %}Ironforge Welding — Professional Welding Services{% endblock %}">
+    <meta property="og:description"
+        content="{% block og_description %}Over 15 years of hands-on welding and fabrication experience. MIG, TIG, stick welding, custom fabrication, and mobile service within 50 miles.{% endblock %}">
+    <meta property="og:image"
+        content="{% block og_image %}{{ url_for('static', filename='images/og-preview.jpg', _external=True) }}{% endblock %}">
     <meta property="og:url" content="{{ request.url }}">
 
     <!-- Twitter / X card -->
@@ -26,16 +31,19 @@
 
     <!-- ===== Favicons ===== -->
     <!-- SVG favicon for modern browsers (scales perfectly at any size) -->
-    <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml">
+    <!-- <link rel="icon" href="{{ url_for('static', filename='images/favicon.svg') }}" type="image/svg+xml"> -->
     <!-- PNG fallback for older browsers -->
-    <link rel="icon" href="{{ url_for('static', filename='images/icon-welding-64.png') }}" type="image/png" sizes="64x64">
+    <link rel="icon" href="{{ url_for('static', filename='images/icon-welding-64.png') }}" type="image/png"
+        sizes="64x64">
     <!-- Apple touch icon for iOS home-screen bookmarks -->
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/apple-touch-icon.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/welding-96.png') }}">
 
     <!-- Google Fonts — display=swap already set to avoid FOIT -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Work+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
 
     <!-- All styles in a separate CSS file -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
@@ -86,6 +94,7 @@
     }
     </script>
 </head>
+
 <body>
 
     <!-- ===== NAVIGATION ===== -->
@@ -97,7 +106,8 @@
             </a>
 
             <!-- Hamburger button for mobile -->
-            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="nav-links">
+            <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false"
+                aria-controls="nav-links">
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
                 <span class="nav-toggle-bar"></span>
@@ -106,6 +116,7 @@
             <ul class="nav-links" id="nav-links" role="list">
                 <li><a href="{{ url_for('home.index') }}">Home</a></li>
                 <li><a href="{{ url_for('services.services') }}">Services</a></li>
+                <li><a href="{{ url_for('gallery.gallery') }}">Gallery</a></li>
                 <li><a href="{{ url_for('contact.contact') }}" class="nav-cta">Get a Quote</a></li>
             </ul>
         </div>
@@ -113,16 +124,16 @@
 
     <!-- ===== FLASH MESSAGES ===== -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-container" role="alert" aria-live="polite">
-                {% for category, message in messages %}
-                    <div class="flash-message flash-{{ category }}">
-                        <span class="flash-text">{{ message }}</span>
-                        <button class="flash-close" aria-label="Dismiss notification">&times;</button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="flash-container" role="alert" aria-live="polite">
+        {% for category, message in messages %}
+        <div class="flash-message flash-{{ category }}">
+            <span class="flash-text">{{ message }}</span>
+            <button class="flash-close" aria-label="Dismiss notification">&times;</button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <!-- ===== MAIN CONTENT ===== -->
@@ -140,7 +151,8 @@
             <p class="footer-tagline">Built strong. Built to last.</p>
             <div class="footer-contact">
                 <p>123 Workshop Lane, Anytown, USA</p>
-                <p><a href="tel:+15558675309" aria-label="Call Ironforge Welding at (555) 867-5309">(555) 867-5309</a></p>
+                <p><a href="tel:+15558675309" aria-label="Call Ironforge Welding at (555) 867-5309">(555) 867-5309</a>
+                </p>
             </div>
             <p class="footer-copy">&copy; {{ current_year }} Ironforge Welding. All rights reserved.</p>
         </div>
@@ -149,4 +161,5 @@
     <!-- All JavaScript in a separate file -->
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
 </body>
+
 </html>

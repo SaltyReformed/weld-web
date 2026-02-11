@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %}Gallery — Ironforge Welding{% endblock %}
+{% block meta_description %}Browse completed welding and fabrication projects by Ironforge Welding — custom gates,
+structural repairs, decorative metalwork, and more.{% endblock %}
+
+{% block content %}
+
+<!-- ===== GALLERY HERO ===== -->
+<section class="page-hero">
+    <h1>Our <span class="text-accent">Work</span></h1>
+    <p class="page-hero-sub">
+        A sample of recent projects — from heavy structural repairs to
+        detailed decorative metalwork.
+    </p>
+</section>
+
+<!-- ===== CATEGORY FILTERS ===== -->
+<section class="gallery-section" aria-label="Project gallery">
+    <div class="gallery-container">
+
+        <!-- Filter buttons — JS handles client-side toggling; the href
+             provides a server-side fallback for non-JS visitors. -->
+        <nav class="gallery-filters" aria-label="Filter projects by category">
+            {% for cat in categories %}
+            <a href="{{ url_for('gallery.gallery', category=cat.slug) }}"
+                class="filter-btn{% if cat.slug == active_category %} active{% endif %}" data-category="{{ cat.slug }}"
+                aria-pressed="{{ 'true' if cat.slug == active_category else 'false' }}">
+                {{ cat.label }}
+            </a>
+            {% endfor %}
+        </nav>
+
+        <!-- ===== PROJECT GRID ===== -->
+        <div class="gallery-grid" id="gallery-grid">
+            {% for project in projects %}
+            <article class="gallery-card" data-category="{{ project.category }}">
+                <div class="gallery-image-wrapper">
+                    <!-- All gallery images are below the fold — lazy load -->
+                    <img class="gallery-image" src="{{ url_for('static', filename='images/' ~ project.image) }}"
+                        alt="{{ project.image_alt }}" loading="lazy" width="600" height="400">
+                    <!-- Overlay that appears on hover / focus -->
+                    <div class="gallery-overlay">
+                        <button class="gallery-zoom-btn"
+                            data-image="{{ url_for('static', filename='images/' ~ project.image) }}"
+                            data-alt="{{ project.image_alt }}" data-title="{{ project.title }}"
+                            data-description="{{ project.description }}"
+                            aria-label="View full-size image of {{ project.title }}">
+                            <!-- Simple zoom icon via CSS -->
+                            <span class="zoom-icon" aria-hidden="true">⊕</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="gallery-card-body">
+                    <span class="gallery-category-badge">{{ project.category }}</span>
+                    <h3 class="gallery-card-title">{{ project.title }}</h3>
+                    <p class="gallery-card-desc">{{ project.description }}</p>
+                </div>
+            </article>
+            {% endfor %}
+        </div>
+
+        <!-- Empty state when no projects match the filter -->
+        <div class="gallery-empty" id="gallery-empty" hidden>
+            <p>No projects in this category yet — check back soon!</p>
+        </div>
+    </div>
+</section>
+
+<!-- ===== LIGHTBOX CONTAINER (hidden by default) ===== -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Full-size project image" hidden>
+    <button class="lightbox-close" id="lightbox-close" aria-label="Close lightbox">&times;</button>
+    <div class="lightbox-content">
+        <img class="lightbox-image" id="lightbox-image" src="" alt="">
+        <div class="lightbox-caption" id="lightbox-caption">
+            <h3 class="lightbox-title" id="lightbox-title"></h3>
+            <p class="lightbox-desc" id="lightbox-desc"></p>
+        </div>
+    </div>
+</div>
+
+<!-- ===== CTA BANNER ===== -->
+<section class="cta-banner" aria-label="Call to action">
+    <h2>Like what you see?</h2>
+    <p>Get a free, no-obligation quote for your next project.</p>
+    <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Request a Quote</a>
+</section>
+
+{% endblock %}

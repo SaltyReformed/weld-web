@@ -114,6 +114,18 @@ a:hover {
     border: 0;
 }
 
+/* Shared section heading used across testimonials, gallery, etc. */
+.section-heading {
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    text-transform: uppercase;
+    color: var(--color-text-heading);
+    text-align: center;
+    margin-bottom: var(--space-xl);
+    line-height: 1.15;
+}
+
 /* --------------------------------------------------------------------------
    Buttons
    -------------------------------------------------------------------------- */
@@ -242,7 +254,12 @@ a:hover {
     background: none;
     border: none;
     cursor: pointer;
-    padding: var(--space-xs);
+    padding: var(--space-sm);
+    /* Larger touch target (44x44 minimum) */
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+    justify-content: center;
 }
 
 .nav-toggle-bar {
@@ -252,6 +269,8 @@ a:hover {
     background-color: var(--color-text-heading);
     border-radius: 2px;
     transition: all var(--transition);
+    /* Use transform-origin for cleaner X animation */
+    transform-origin: center center;
 }
 
 .nav-toggle.open .nav-toggle-bar:nth-child(1) {
@@ -260,6 +279,7 @@ a:hover {
 
 .nav-toggle.open .nav-toggle-bar:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
 }
 
 .nav-toggle.open .nav-toggle-bar:nth-child(3) {
@@ -308,6 +328,12 @@ a:hover {
     line-height: 1;
     opacity: 0.7;
     transition: opacity var(--transition);
+    /* Minimum touch target */
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .flash-close:hover {
@@ -466,6 +492,118 @@ a:hover {
 }
 
 /* --------------------------------------------------------------------------
+   Testimonials (Home)
+   -------------------------------------------------------------------------- */
+.testimonials {
+    padding: var(--space-2xl) var(--space-lg);
+    background-color: var(--color-bg);
+}
+
+.testimonials-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+.testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-lg);
+}
+
+.testimonial-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-md);
+    transition: border-color var(--transition), transform var(--transition);
+    /* Position the decorative quote mark */
+    position: relative;
+    overflow: hidden;
+}
+
+.testimonial-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+}
+
+/* Decorative oversized quotation mark */
+.testimonial-card::before {
+    content: "\201C";
+    position: absolute;
+    top: -12px;
+    left: 16px;
+    font-family: Georgia, serif;
+    font-size: 6rem;
+    line-height: 1;
+    color: var(--color-accent);
+    opacity: 0.12;
+    pointer-events: none;
+}
+
+.testimonial-stars {
+    display: flex;
+    gap: 2px;
+}
+
+.testimonial-stars .star {
+    color: var(--color-accent);
+    font-size: 1.1rem;
+}
+
+.testimonial-quote {
+    color: var(--color-text);
+    font-size: 0.95rem;
+    line-height: 1.8;
+    font-style: italic;
+    flex-grow: 1;
+    /* Push the author info to the bottom */
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: var(--space-md);
+    padding-top: var(--space-md);
+    border-top: 1px solid var(--color-border);
+}
+
+.testimonial-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--color-accent);
+    color: var(--color-bg);
+    font-family: var(--font-heading);
+    font-weight: 900;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.testimonial-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.testimonial-name {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: var(--color-text-heading);
+    font-style: normal;
+}
+
+.testimonial-role {
+    color: var(--color-text-muted);
+    font-size: 0.8rem;
+}
+
+/* --------------------------------------------------------------------------
    About Snapshot (Home)
    -------------------------------------------------------------------------- */
 .about-snapshot {
@@ -497,10 +635,14 @@ a:hover {
     line-height: 1.8;
 }
 
-.about-text .btn {
+.about-actions {
+    display: flex;
+    gap: var(--space-md);
     margin-top: var(--space-md);
+    flex-wrap: wrap;
 }
 
+/* Support the old placeholder box if it's still referenced */
 .placeholder-box {
     display: flex;
     flex-direction: column;
@@ -527,8 +669,16 @@ a:hover {
     font-weight: 400;
 }
 
+/* About section photo */
+.about-photo {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    object-fit: cover;
+}
+
 /* --------------------------------------------------------------------------
-   Page Hero (Services, Contact, etc.)
+   Page Hero (Services, Contact, Gallery, etc.)
    -------------------------------------------------------------------------- */
 .page-hero {
     padding: calc(5rem + var(--space-2xl)) var(--space-lg) var(--space-xl);
@@ -622,6 +772,9 @@ a:hover {
     margin-bottom: var(--space-md);
 }
 
+/* FIX: Raised max-height ceiling from 200px to 600px so longer
+   descriptions are never clipped. The actual height is determined
+   by content; 600px is just the animation ceiling.                */
 .service-detail {
     max-height: 0;
     overflow: hidden;
@@ -630,7 +783,7 @@ a:hover {
 }
 
 .service-detail.expanded {
-    max-height: 200px;
+    max-height: 600px;
     opacity: 1;
     margin-bottom: var(--space-md);
 }
@@ -654,10 +807,281 @@ a:hover {
     letter-spacing: 0.08em;
     cursor: pointer;
     transition: color var(--transition);
+    /* Minimum touch target for mobile */
+    min-height: 44px;
+    padding: var(--space-sm) 0;
 }
 
 .service-toggle:hover {
     color: var(--color-accent-hover);
+}
+
+/* --------------------------------------------------------------------------
+   Gallery Section
+   -------------------------------------------------------------------------- */
+.gallery-section {
+    padding: var(--space-2xl) var(--space-lg);
+}
+
+.gallery-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+}
+
+/* ---- Filter Buttons ---- */
+.gallery-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-sm);
+    justify-content: center;
+    margin-bottom: var(--space-xl);
+}
+
+.filter-btn {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.55rem 1.3rem;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    background-color: transparent;
+    color: var(--color-text);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+    /* Touch target */
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+}
+
+.filter-btn:hover,
+.filter-btn.active {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: var(--color-bg);
+}
+
+/* ---- Project Grid ---- */
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: var(--space-lg);
+}
+
+.gallery-card {
+    background-color: var(--color-bg-card);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: border-color var(--transition), transform var(--transition);
+    /* For the filter animation */
+    animation: gallery-fade-in 0.35s ease-out;
+}
+
+.gallery-card:hover {
+    border-color: var(--color-accent);
+    transform: translateY(-3px);
+}
+
+/* Hidden state for JS filtering */
+.gallery-card.hidden {
+    display: none;
+}
+
+@keyframes gallery-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.gallery-image-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 260px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.gallery-card:hover .gallery-image {
+    transform: scale(1.05);
+}
+
+/* Hover overlay with zoom button */
+.gallery-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 17, 20, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity var(--transition);
+}
+
+.gallery-card:hover .gallery-overlay,
+.gallery-card:focus-within .gallery-overlay {
+    opacity: 1;
+}
+
+.gallery-zoom-btn {
+    background: var(--color-accent);
+    border: none;
+    color: var(--color-bg);
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform var(--transition), background-color var(--transition);
+}
+
+.gallery-zoom-btn:hover {
+    transform: scale(1.1);
+    background-color: var(--color-accent-hover);
+}
+
+.zoom-icon {
+    line-height: 1;
+}
+
+.gallery-card-body {
+    padding: var(--space-lg);
+}
+
+.gallery-category-badge {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-sm);
+    padding: 0.2rem 0.6rem;
+    margin-bottom: var(--space-sm);
+}
+
+.gallery-card-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-heading);
+    margin-bottom: var(--space-sm);
+}
+
+.gallery-card-desc {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    line-height: 1.65;
+}
+
+/* Gallery empty state */
+.gallery-empty {
+    text-align: center;
+    padding: var(--space-xl);
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+}
+
+/* --------------------------------------------------------------------------
+   Lightbox
+   -------------------------------------------------------------------------- */
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-lg);
+    animation: lightbox-fade-in 0.25s ease-out;
+}
+
+.lightbox[hidden] {
+    display: none;
+}
+
+@keyframes lightbox-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.lightbox-close {
+    position: absolute;
+    top: var(--space-lg);
+    right: var(--space-lg);
+    background: none;
+    border: none;
+    color: var(--color-text-heading);
+    font-size: 2.2rem;
+    cursor: pointer;
+    z-index: 2001;
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color var(--transition);
+}
+
+.lightbox-close:hover {
+    color: var(--color-accent);
+}
+
+.lightbox-content {
+    max-width: 900px;
+    width: 100%;
+    text-align: center;
+}
+
+.lightbox-image {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: var(--radius-md);
+    margin: 0 auto var(--space-lg);
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-title {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    color: var(--color-text-heading);
+    margin-bottom: var(--space-xs);
+}
+
+.lightbox-desc {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
 }
 
 /* --------------------------------------------------------------------------
@@ -946,6 +1370,14 @@ a:hover {
         padding: var(--space-sm) 0;
     }
 
+    /* Larger touch targets for nav links on mobile */
+    .nav-links a {
+        display: block;
+        padding: var(--space-sm) var(--space-lg);
+        min-height: 44px;
+        line-height: 44px;
+    }
+
     .nav-cta {
         margin: var(--space-sm) var(--space-lg);
         display: block;
@@ -957,8 +1389,76 @@ a:hover {
         gap: var(--space-lg);
     }
 
+    /* On mobile: show contact quick-info bar ABOVE the form */
     .contact-container {
         grid-template-columns: 1fr;
+    }
+
+    .contact-info {
+        /* Reorder sidebar above form on mobile for quick access to
+           phone number and hours — the info mobile users want first. */
+        order: -1;
+        padding: var(--space-md);
+        background-color: var(--color-bg-card);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-md);
+    }
+
+    /* Hide the sidebar image on mobile to save vertical space;
+       the form is more important on small screens. */
+    .contact-sidebar-image {
+        display: none;
+    }
+
+    /* Stack info items in a 2-column grid on mobile */
+    .contact-info .info-item {
+        margin-bottom: var(--space-md);
+    }
+
+    /* Reduce padding on form wrapper for mobile */
+    .contact-form-wrapper {
+        padding: var(--space-lg);
+    }
+
+    /* Testimonials: stack to single column */
+    .testimonials-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Gallery: single column on mobile */
+    .gallery-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* Gallery filter buttons: smaller text, scroll horizontally */
+    .gallery-filters {
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: var(--space-sm);
+        gap: var(--space-xs);
+    }
+
+    .filter-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 0.78rem;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Lightbox: full-screen on mobile */
+    .lightbox {
+        padding: var(--space-md);
+    }
+
+    .lightbox-image {
+        max-height: 55vh;
+    }
+
+    .lightbox-close {
+        top: var(--space-sm);
+        right: var(--space-sm);
     }
 }
 
@@ -975,5 +1475,20 @@ a:hover {
     .hero-actions .btn {
         width: 100%;
         max-width: 280px;
+    }
+
+    /* About actions stack vertically on very small screens */
+    .about-actions {
+        flex-direction: column;
+    }
+
+    .about-actions .btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    /* Gallery cards: tighter padding */
+    .gallery-card-body {
+        padding: var(--space-md);
     }
 }

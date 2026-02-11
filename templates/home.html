@@ -7,9 +7,10 @@
 <section class="hero" aria-label="Welcome to Ironforge Welding">
     <div class="hero-overlay"></div>
 
-    <!-- Background video with poster fallback for slow connections -->
+    <!-- Background video with poster fallback for slow connections.
+         No loading="lazy" here — the hero is above the fold. -->
     <video class="hero-video" autoplay muted loop playsinline
-           poster="{{ url_for('static', filename='images/hero-poster.jpg') }}">
+        poster="{{ url_for('static', filename='images/hero-poster.jpg') }}">
         <source src="{{ url_for('static', filename='videos/welding.mp4') }}" type="video/mp4">
     </video>
 
@@ -48,6 +49,37 @@
     </div>
 </section>
 
+<!-- ===== TESTIMONIALS / SOCIAL PROOF ===== -->
+<section class="testimonials" aria-label="Customer testimonials">
+    <div class="testimonials-container">
+        <h2 class="section-heading">What Our <span class="text-accent">Customers</span> Say</h2>
+        <div class="testimonials-grid">
+            {% for t in testimonials %}
+            <blockquote class="testimonial-card" id="testimonial-{{ t.id }}">
+
+                <!-- Star rating -->
+                <div class="testimonial-stars" aria-label="{{ t.rating }} out of 5 stars">
+                    {% for i in range(t.rating) %}
+                    <span class="star" aria-hidden="true">★</span>
+                    {% endfor %}
+                </div>
+
+                <p class="testimonial-quote">{{ t.quote }}</p>
+
+                <footer class="testimonial-author">
+                    <!-- Decorative initial avatar -->
+                    <span class="testimonial-avatar" aria-hidden="true">{{ t.name[0] }}</span>
+                    <div class="testimonial-meta">
+                        <cite class="testimonial-name">{{ t.name }}</cite>
+                        <span class="testimonial-role">{{ t.role }}</span>
+                    </div>
+                </footer>
+            </blockquote>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
 <!-- ===== ABOUT SNAPSHOT ===== -->
 <section class="about-snapshot" aria-label="About Ironforge Welding">
     <div class="about-container">
@@ -63,12 +95,16 @@
                 work directly with me from start to finish — no runaround, no
                 middlemen.
             </p>
-            <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Let's Talk</a>
+            <div class="about-actions">
+                <a href="{{ url_for('contact.contact') }}" class="btn btn-primary">Let's Talk</a>
+                <a href="{{ url_for('gallery.gallery') }}" class="btn btn-outline">See Our Work</a>
+            </div>
         </div>
         <div class="about-image-placeholder">
+            <!-- Below the fold — lazy load -->
             <img src="{{ url_for('static', filename='images/welder-unsplash.jpg') }}"
-                 alt="Welder at work in the Ironforge shop, sparks flying as he grinds a steel joint"
-                 class="about-photo">
+                alt="Welder at work in the Ironforge shop, sparks flying as he grinds a steel joint" class="about-photo"
+                loading="lazy" width="560" height="400">
         </div>
     </div>
 </section>
