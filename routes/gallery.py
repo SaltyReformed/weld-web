@@ -31,7 +31,7 @@ PROJECTS = [
         "id": "proj-1",
         "title": "Custom Driveway Gate",
         "category": "fabrication",
-        "image": "welded_gate.jpg",
+        "image": "driveway-gate.jpg",
         "image_alt": (
             "Ornamental wrought-iron driveway gate with scrollwork "
             "detail, installed between stone pillars"
@@ -45,7 +45,7 @@ PROJECTS = [
         "id": "proj-2",
         "title": "Trailer Frame Repair",
         "category": "repair",
-        "image": "trailer_repair.jpg",
+        "image": "trailer-frame.jpg",
         "image_alt": (
             "Repaired flatbed trailer frame showing fresh weld beads "
             "on reinforced cross-members"
@@ -60,22 +60,22 @@ PROJECTS = [
         "id": "proj-3",
         "title": "Staircase Railing",
         "category": "decorative",
-        "image": "metal_stairs.jpg",
+        "image": "stair-railing.jpg",
         "image_alt": (
             "Modern steel staircase railing with clean horizontal "
-            "cable runs in a residential interior"
+            "steel runs in a residential interior"
         ),
         "description": (
-            "Contemporary cable railing for a two-story interior "
-            "staircase. Brushed stainless steel posts with "
-            "horizontal cable infill."
+            "Contemporary steel railing for a two-story "
+            "interior staircase. Brushed stainless steel"
+            "posts with horizontal brushed stainless infill."
         ),
     },
     {
         "id": "proj-4",
         "title": "Structural Beam Reinforcement",
         "category": "structural",
-        "image": "beam-reinforcement.jpg",
+        "image": "i-beam-weld.jpg",
         "image_alt": (
             "Heavy steel I-beam with fresh gusset plates welded "
             "at the connection point inside a commercial building"
@@ -92,28 +92,27 @@ PROJECTS = [
         "category": "fabrication",
         "image": "custom-fire-pit.jpg",
         "image_alt": (
-            "Round steel fire pit with decorative cut-out patterns "
-            "glowing from the flames inside, set on a stone patio"
+            "Square steel fire pit with decorative cut-out patterns "
+            "firewood stacked inside, set on a sand patio"
         ),
         "description": (
-            "36-inch diameter fire pit with custom plasma-cut "
-            "mountain-range pattern. Finished with high-heat "
-            "clear coat."
+            "36-inch square fire pit. Finished with high-heat " "clear coat."
         ),
     },
     {
         "id": "proj-6",
         "title": "Equipment Repair",
-        "category": "structural",
+        "category": "repair",
         "image": "equipment-repair.jpg",
         "image_alt": (
-            "Heavy-duty steel mounting brackets welded to a truck "
-            "bed for securing equipment during transport"
+            "Professional welder repairing a cracked excavator scoop "
+            "with heavy-duty welding equipment in a workshop"
         ),
         "description": (
-            "Custom heavy-duty mounting brackets for a service "
-            "truck. Designed to secure a generator and air "
-            "compressor for daily transport."
+            "Structural repair and reinforcement of a worn excavator "
+            "scoop. Cracks were welded, weak points rebuilt, and "
+            "high-wear areas reinforced to restore strength and "
+            "extend the life of the equipment."
         ),
     },
 ]
