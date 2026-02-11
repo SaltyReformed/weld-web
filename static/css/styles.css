@@ -435,6 +435,10 @@ a:hover {
     z-index: 0;
 }
 
+.hero--inner {
+    min-height: 45vh;
+}
+
 @keyframes hero-fade-in {
     from {
         opacity: 0;

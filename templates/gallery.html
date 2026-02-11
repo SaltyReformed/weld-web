@@ -6,12 +6,22 @@ structural repairs, decorative metalwork, and more.{% endblock %}
 {% block content %}
 
 <!-- ===== GALLERY HERO ===== -->
-<section class="page-hero">
-    <h1>Our <span class="text-accent">Work</span></h1>
-    <p class="page-hero-sub">
-        A sample of recent projects — from heavy structural repairs to
-        detailed decorative metalwork.
-    </p>
+<section class="hero hero--inner" aria-label="Ironforge Welding Services">
+    <div class="hero-overlay"></div>
+
+    <!-- Background video with poster fallback for slow connections -->
+    <video class="hero-video" autoplay muted loop playsinline
+        poster="{{ url_for('static', filename='images/hero-fallback-home.jpg') }}">
+        <source src="{{ url_for('static', filename='videos/sparks.mp4') }}" type="video/mp4">
+    </video>
+
+    <div class="hero-content">
+        <h1 class="hero-headline">Our <span class="text-accent">Work</span></h1>
+        <p class="hero-sub">
+            A sample of recent projects — from heavy structural repairs to
+            detailed decorative metalwork.
+        </p>
+    </div>
 </section>
 
 <!-- ===== CATEGORY FILTERS ===== -->

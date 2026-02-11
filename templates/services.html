@@ -1,11 +1,12 @@
 {% extends "base.html" %}
 {% block title %}Services — Ironforge Welding{% endblock %}
-{% block meta_description %}Explore the welding services offered by Ironforge Welding — MIG, TIG, stick welding, custom fabrication, repair, and mobile welding.{% endblock %}
+{% block meta_description %}Explore the welding services offered by Ironforge Welding — MIG, TIG, stick welding, custom
+fabrication, repair, and mobile welding.{% endblock %}
 
 {% block content %}
 
 <!-- ===== SERVICES HERO ===== -->
-<section class="hero" aria-label="Ironforge Welding Services">
+<section class="hero hero--inner" aria-label="Ironforge Welding Services">
     <div class="hero-overlay"></div>
 
     <!-- Background video with poster fallback for slow connections -->
@@ -22,7 +23,6 @@
         </p>
     </div>
 </section>
-<section class="page-hero">
 
 
 <!-- ===== SERVICES GRID ===== -->
@@ -33,12 +33,8 @@
 
             <!-- Service photo — sits at the top of each card -->
             <div class="service-image-wrapper">
-                <img class="service-image"
-                     src="{{ url_for('static', filename='images/' ~ service.image) }}"
-                     alt="{{ service.image_alt }}"
-                     loading="lazy"
-                     width="400"
-                     height="200">
+                <img class="service-image" src="{{ url_for('static', filename='images/' ~ service.image) }}"
+                    alt="{{ service.image_alt }}" loading="lazy" width="400" height="200">
             </div>
 
             <div class="service-icon" aria-hidden="true">{{ service.icon }}</div>
@@ -47,10 +43,8 @@
             <div class="service-detail" id="detail-{{ service.id }}">
                 <p>{{ service.long_description }}</p>
             </div>
-            <button class="service-toggle"
-                    aria-expanded="false"
-                    aria-controls="detail-{{ service.id }}"
-                    aria-label="Toggle details for {{ service.title }}">
+            <button class="service-toggle" aria-expanded="false" aria-controls="detail-{{ service.id }}"
+                aria-label="Toggle details for {{ service.title }}">
                 Learn More
             </button>
         </article>
